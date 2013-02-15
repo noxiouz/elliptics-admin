@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block body %}
+    {% for category, message in get_flashed_messages(True) %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+
+    <h1>Add any node address</h1>
+    <form class="form-inline" method="post">
+        <input type="text" class="input-xxlarge" placeholder="Node address" name="remote">
+        <input type="submit" class="btn" value="Add">
+    </form>
+{% endblock %}

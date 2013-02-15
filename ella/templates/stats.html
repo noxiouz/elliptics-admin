@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <strong><a name="top" class="muted">Groups:</a></strong>
+    {% for aggregated_stats, grouper in aggr_stats %}
+        <a href="#group_id_{{ aggregated_stats.group_id }}">{{ aggregated_stats.group_id }}</a>&nbsp;
+    {% endfor %}
+    <br>
+    {% for aggregated_stats, grouper in aggr_stats %}
+        <br>
+        <div>
+            <a href="#top" class="pull-right">back to top</a>
+            <h3 class="pagination-centered"><a name="group_id_{{ aggregated_stats.group_id }}">Group id - {{ aggregated_stats.group_id }}</a></h3>
+
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Counters</th>
+                <th>Proxy commands</th>
+                <th>Storage commands</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% if grouper|length > 1 %}
+                {% with log=aggregated_stats %}
+                    {% include 'tr-stats.html' %}
+                {% endwith %}
+            {% endif %}
+
+
+            {% for log in grouper %}
+                {% include 'tr-stats.html' with context %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+
+{% endblock %}

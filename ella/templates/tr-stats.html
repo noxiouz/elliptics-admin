@@ -1,0 +1,36 @@
+<tr>
+    <td>
+        <div>{{ log.addr }}</div>
+        <div>Group ID: {{ log.group_id }}</div>
+    </td>
+    <td>
+        {% for k,v in log.counters|dictsort %}
+            <div>
+                {{ k }} - {{ v[0] }}
+                {% if v[1] > 0 %}
+                    | <span class="text-error">{{ v[1] }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </td>
+    <td>
+        {% for k,v in log.proxy_commands|dictsort %}
+            <div>
+                {{ k }} - {{ v[0] }}
+                {% if v[1] > 0 %}
+                    | <span class="text-error">{{ v[1] }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </td>
+    <td>
+        {% for k,v in log.storage_commands|dictsort %}
+            <div>
+                {{ k }} - {{ v[0] }}
+                {% if v[1] > 0 %}
+                    | <span class="text-error">{{ v[1] }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </td>
+</tr>

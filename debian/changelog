@@ -1,0 +1,11 @@
+ella (0.0.8) lucid; urgency=low
+
+  * fix bug with >2.20 
+
+ -- Anton Tyurin <noxiouz@yandex-team.ru>  Fri, 25 Jan 2013 00:08:15 +0400
+
+ella (0.0.7) lucid; urgency=low
+
+  * Initial release.
+
+ -- Alexander Eliseev <inkvi@yandex-team.ru>  Thu, 11 Oct 2012 15:54:05 +0400

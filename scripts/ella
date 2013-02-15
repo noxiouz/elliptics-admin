@@ -1,0 +1,19 @@
+use Ubic::Service::SimpleDaemon;
+use strict;
+use warnings;
+
+use YAML qw(LoadFile);
+
+my $config = "/etc/ella/settings.yml";
+my $settings = LoadFile($config);
+
+if (! defined $settings->{'PORT'}) { $settings->{'PORT'} = 5001 };
+if (! defined $settings->{'LOGLEVEL'}) { $settings->{'LOGLEVEL'} = "debug" };
+
+my $service = Ubic::Service::SimpleDaemon->new(
+    bin => "/usr/bin/gunicorn -b 0.0.0.0:".$settings->{'PORT'}." --log-level=".$settings->{'LOGLEVEL'}." wsgi:app",
+    stdout => "/var/log/ella/ella.log",
+    stderr => "/var/log/ella/error.log",
+    ubic_log => "/var/log/ubic.log",
+    cwd => "/usr/share/pyshared/ella/",
+);

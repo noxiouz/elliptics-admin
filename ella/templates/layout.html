@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elliptics Admin</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/">Elliptics</a>
+
+            {% if 'remote' in session %}
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li><a href="{{ url_for('routing') }}">Routes table</a></li>
+                        <li><a href="{{ url_for('stats') }}">Statistics</a></li>
+                        <li><a href="{{ url_for('find') }}">Find</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li>
+                            <a>{{ session['remote'] }}</a>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {% block body %}
+        <h2>Used address: {{ session['remote'] }}</h2>
+        {% if not hardcoded_elliptics_hostname %}
+            <form class="form-inline" method="post">
+                <button type="submit" class="btn" name="disconnect" value="1">Disconnect</button>
+            </form>
+        {% endif %}
+
+    {% endblock %}
+</div>
+<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.js') }}"></script>
+{% block js %}
+{% endblock %}
+</body>
+</html>

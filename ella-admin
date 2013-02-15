@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from uuid import uuid4
+import os
+import sys
+import yaml
+
+def ask(what, empty=False, default=None):
+    rv = None
+    while not rv:
+        if empty:
+            msg = '%s (or empty): ' % what
+        elif default is not None:
+            msg = '%s (default: %s): ' % (what, default)
+        else:
+            msg = '%s: ' % what
+
+        rv = raw_input(msg)
+
+        if not rv and empty:
+            break
+
+        if not rv and default is not None:
+            rv = default
+            break
+
+        if not rv:
+            print '%s cannot be empty' % what
+
+    return rv
+
+
+def main():
+    etc_dir = '/etc/ella'
+    if not os.path.exists(etc_dir):
+        try:
+            os.mkdir(etc_dir)
+        except OSError as e:
+            print 'Unable to create dir %s. %s' % (etc_dir, e)
+            sys.exit(1)
+
+    settings_path = etc_dir + '/settings.yml'
+
+    if not os.path.exists(settings_path) and not os.access(etc_dir, os.W_OK):
+        print 'Write access to %s is required' % etc_dir
+        sys.exit(1)
+
+    if os.path.exists(settings_path) and not os.access(settings_path, os.W_OK):
+        print 'Write access to %s is required' % settings_path
+        sys.exit(1)
+
+    if os.path.exists(settings_path):
+        with open(settings_path, 'r') as f:
+            settings = yaml.load(f)
+    else:
+        settings = {}
+
+
+    port = ask("Port", default=5001)
+    elliptics_hostname = ask("Elliptics hostname", empty=True)
+    log_level = ask("Log level", default='debug')
+
+    settings['PORT'] = port
+    settings['SECRET_KEY'] = str(uuid4())
+    settings['LOGLEVEL'] = log_level
+
+    if elliptics_hostname:
+        settings['ELLIPTICS_HOSTNAME'] = elliptics_hostname
+
+    with open(settings_path, 'w') as f:
+        yaml.dump(settings, f)
+
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

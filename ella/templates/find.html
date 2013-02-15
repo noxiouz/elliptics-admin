@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <form class="form-search" action="{{ url_for('find') }}" method="get">
+        <input type="text" class="input-xlarge" name="key">
+        <button type="submit" class="btn">Search</button>
+    </form>
+
+    {% if data is defined %}
+        {% if data %}
+            <p>Data is found for key `{{ key }}` with length equal to {{ data|length }} bytes</p>
+            <p>Hash is <small>{{ hash }}</small></p>
+            <p><a class="btn btn-mini" href="/download/{{ urlencoded_key }}" target="_blank">Download</a></p>
+            <br>
+            <h3>Data:</h3>
+            {% for line in objects %}
+                <p>{{ line|safe }}</p>
+            {% endfor %}
+            <br>
+            <h3>Meta:</h3>
+            {% for m in meta %}
+                <p><strong>Group:</strong> {{ m['group'] }}, <strong>ip:</strong> {{ m['ip'] }}</p>
+                {% for line in m['lines'] %}
+                    <p>{{ line|safe }}</p>
+                {% endfor %}
+                <br>
+            {% endfor %}
+
+        {% else %}
+            Key `{{ key }}` is not found
+        {% endif %}
+    {% endif %}
+
+
+{% endblock %}

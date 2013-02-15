@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    {% for group_id, group_info in groups.items() %}
+        <div id="group_chart_{{ group_id }}" class="dynamicbar" style="width: 100%; height: 500px;"></div>
+
+        <script type="text/javascript">
+            google.load("visualization", "1", {packages:["corechart"]});
+            google.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                                                                     ['IP', 'First Digits'],
+                                                                     {%  for start_id, value in pie_groups_interest[group_id].items() %}
+                                                                         ['{{ group_info[start_id] }}', {{ value }}],
+                                                                     {% endfor %}
+                                                                 ]);
+
+                var options = {
+                    title:'Group ID #{{ group_id }}',
+                    backgroundColor:'#121417',
+                    is3D:true,
+                    legend:{
+                        textStyle:{
+                            color:'#fff',
+                            fontSize:16
+                        },
+                        position:'right'
+                    },
+                    titleTextStyle:{
+                        color:'#fff',
+                        fontSize:'20'
+                    },
+                    tooltip:{
+                        text:'percentage'
+                    },
+                    chatArea:{
+                        top:0,
+                        left:20,
+                        width:'100%',
+                        height:'100%'
+                    }
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('group_chart_{{ group_id }}'));
+                chart.draw(data, options);
+            }
+        </script>
+    {% endfor %}
+
+{% endblock %}
